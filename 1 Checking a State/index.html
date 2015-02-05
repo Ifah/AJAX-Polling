@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<title>AJAX Polling</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<p>Game State: <span class="game-state"></span></p>
+
+	<script src="jquery-1.11.1.min.js"></script>
+	<script>
+		(function(){
+			var gameState = $('.game-state'),
+				
+				poll = function(){
+					$.ajax({
+						url: 'game.json',
+						dataType: 'json',
+						type: 'get',
+						success: function(data){
+							gameState.text('Upcoming');
+
+							if(data.live){
+								gameState.text('Live');
+								clearInterval(pollInterval);
+							}
+						}
+					});
+				},
+
+				pollInterval = setInterval(function(){
+					poll();
+				}, 2000);
+
+				poll();
+
+		})();
+	</script>
+</body>
+</html>
